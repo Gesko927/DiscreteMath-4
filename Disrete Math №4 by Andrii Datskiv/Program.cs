@@ -10,13 +10,14 @@ namespace Disrete_Math__4_by_Andrii_Datskiv
     class Program
     {
         public static int size;
-        public static int[,] matrix;
+        public static int[,] graph;
+        public static Random random;
         static void Main(string[] args)
         {
             IntroMenu();
 
             Console.Write("Result: ");
-            Console.WriteLine(AmountOfCounters(matrix, size));
+            Console.WriteLine(AmountOfCounters(graph, size));
         }
 
         /**Call menu method
@@ -24,8 +25,8 @@ namespace Disrete_Math__4_by_Andrii_Datskiv
         public static void IntroMenu()
         {
             Console.WriteLine("\tMenu:");
-            Console.WriteLine("1. Random matrix with N size.");
-            Console.WriteLine("2. Matrix from file.");
+            Console.WriteLine("1. Random graph with N size.");
+            Console.WriteLine("2. graph from file.");
 
             string choose = Console.ReadLine();
 
@@ -36,16 +37,16 @@ namespace Disrete_Math__4_by_Andrii_Datskiv
                         Console.Clear();
                         Console.Write("Please, input size: ");
                         size = Convert.ToInt32(Console.ReadLine());
-                        matrix = CreateMatrix(size);
-                        PrintMatrix(matrix, size);
+                        graph = CreateGraph(size);
+                        Printgraph(graph, size);
 
                     }
                     break;
                 case "2":
                     {
                         Console.Clear();
-                        matrix = MatrixFromFile("test.txt");
-                        PrintMatrix(matrix, size);
+                        graph = graphFromFile("test.txt");
+                        Printgraph(graph, size);
 
                     }
                     break;
@@ -62,9 +63,32 @@ namespace Disrete_Math__4_by_Andrii_Datskiv
         /**Unfinished method
          * 
          */ 
-        public static int[,] CreateMatrix(int size)
+        public static int[,] CreateGraph(int size)
         {
+            random = new Random();
             int[,] a = new int[size,size];
+
+            for (int i = 0; i < size; ++i)
+            {
+                for (int j = 0; j < size; ++j)
+                {
+                    a[i, j] = random.Next(0, 10);
+                }
+            }
+
+            for (int i = 0; i < size; ++i)
+            {
+                for(int j = 0; j <  size; ++j)
+                {
+                    if(i == j)
+                    {
+                        a[i, j] = 0;
+                    }
+
+                    a[i, j] = -a[j, i];
+                    a[j, i] += a[i, j];
+                }
+            }
 
             return a;
         }
@@ -94,10 +118,10 @@ namespace Disrete_Math__4_by_Andrii_Datskiv
         }
 
         /**Initialisation from file
-         * Init matrix from file
+         * Init graph from file
          * <filePath>
          */ 
-        public static int[,] MatrixFromFile(string filePath)
+        public static int[,] graphFromFile(string filePath)
         {
             #region Size
 
@@ -146,18 +170,18 @@ namespace Disrete_Math__4_by_Andrii_Datskiv
             return R;
         }
 
-        /**Print matrix
-         * Method for printing matrix
+        /**Print graph
+         * Method for printing graph
          * in console
          */ 
-        public static void PrintMatrix(int[,] matrix, int size)
+        public static void Printgraph(int[,] graph, int size)
         {
             for (int i = 0; i < size; i++)
             {
                 Console.Write("\t| ");
                 for (int j = 0; j < size; j++)
                 {
-                    Console.Write("{0} ", matrix[i, j]);
+                    Console.Write("{0} ", graph[i, j]);
                 }
                 Console.WriteLine("|");
             }
